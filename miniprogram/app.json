@@ -1,0 +1,52 @@
+{
+    "pages": [
+      "pages/index/index",
+      "pages/contact/add",
+      "pages/contact/edit",
+      "pages/history/history",
+      "pages/settings/settings"
+    ],
+    "window": {
+      "backgroundTextStyle": "light",
+      "navigationBarBackgroundColor": "#3498db",
+      "navigationBarTitleText": "通知筛选器",
+      "navigationBarTextStyle": "white"
+    },
+    "tabBar": {
+      "color": "#999999",
+      "selectedColor": "#3498db",
+      "backgroundColor": "#ffffff",
+      "borderStyle": "black",
+      "list": [
+        {
+          "pagePath": "pages/index/index",
+          "text": "联系人"
+        },
+        {
+          "pagePath": "pages/history/history",
+          "text": "通知历史"
+        },
+        {
+          "pagePath": "pages/settings/settings",
+          "text": "设置"
+        }
+      ]
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json",
+    "lazyCodeLoading": "requiredComponents",
+    "cloud": true,
+    "networkTimeout": {
+      "request": 10000,
+      "connectSocket": 10000,
+      "uploadFile": 10000,
+      "downloadFile": 10000
+    },
+    "permission": {
+      "scope.userNotification": {
+        "desc": "通知筛选器需要通知权限来提醒您重要联系人的消息"
+      }
+    },
+    "resizable": false,
+    "debug": false
+  }

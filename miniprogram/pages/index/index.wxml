@@ -1,0 +1,32 @@
+<view class="container">
+  <!-- 头部 -->
+  <view class="header">
+    <text class="title">重要联系人</text>
+    <button class="add-button" bindtap="navigateToAdd">添加</button>
+  </view>
+  
+  <!-- 联系人列表 -->
+  <view class="contact-list">
+    <block wx:if="{{contacts.length > 0}}">
+        <view class="contact-item" wx:for="{{contacts}}" wx:key="_id">
+  <view class="contact-info">
+    <text class="contact-name">{{item.name}}</text>
+  </view>
+  <view class="contact-actions">
+    <switch checked="{{item.isImportant}}" bindchange="toggleImportant" data-id="{{item._id}}" color="#3498db"/>
+    <view class="action-buttons">
+      <button class="edit-button" bindtap="navigateToEdit" data-id="{{item._id}}">编辑</button>
+      <button class="delete-button" bindtap="deleteContact" data-id="{{item._id}}">删除</button>
+    </view>
+  </view>
+</view>
+    </block>
+    <view wx:else class="empty-list">
+      <text>暂无重要联系人，请点击"添加"按钮添加联系人</text>
+    </view>
+  </view>
+</view>
+
+<view class="dev-tools" wx:if="{{isDev}}">
+  <button class="test-button" bindtap="testNotification">测试通知</button>
+</view>

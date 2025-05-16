@@ -1,0 +1,13 @@
+<view class="container">
+  <view class="form-group">
+    <text class="label">联系人名称</text>
+    <input class="input" placeholder="请输入联系人名称" value="{{contactName}}" bindinput="onNameInput"/>
+  </view>
+  
+  <view class="form-group">
+    <text class="label">是否为重要联系人</text>
+    <switch checked="{{isImportant}}" bindchange="toggleImportant" color="#3498db"/>
+  </view>
+  
+  <button class="submit-button" bindtap="saveContact">保存联系人</button>
+</view>

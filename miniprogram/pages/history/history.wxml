@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="header">
+    <text class="title">通知历史</text>
+    <button class="clear-button" bindtap="clearHistory">清空</button>
+  </view>
+  
+  <view class="notification-list">
+    <block wx:if="{{notifications.length > 0}}">
+      <view class="notification-item" wx:for="{{notifications}}" wx:key="id">
+        <view class="notification-header">
+          <text class="notification-sender">{{item.sender}}</text>
+          <text class="notification-time">{{item.formattedTime}}</text>
+        </view>
+        <text class="notification-content">{{item.content}}</text>
+      </view>
+    </block>
+    <view wx:else class="empty-list">
+      <text>暂无通知历史记录</text>
+    </view>
+  </view>
+</view>

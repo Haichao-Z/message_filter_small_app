@@ -1,0 +1,78 @@
+.container {
+    padding: 30rpx;
+    background-color: #f6f6f6;
+    min-height: 100vh;
+  }
+  
+  .section-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
+    padding: 20rpx 0;
+    margin-top: 30rpx;
+  }
+  
+  .setting-item {
+    background-color: #fff;
+    padding: 30rpx 20rpx;
+    border-radius: 10rpx;
+    margin-bottom: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.1);
+  }
+  
+  .setting-left {
+    flex: 1;
+  }
+  
+  .setting-name {
+    font-size: 30rpx;
+    color: #333;
+    display: block;
+    margin-bottom: 10rpx;
+  }
+  
+  .setting-desc {
+    font-size: 24rpx;
+    color: #999;
+  }
+  
+  .subscribe-button {
+    background-color: #3498db;
+    color: white;
+    font-size: 32rpx;
+    padding: 20rpx 0;
+    border-radius: 10rpx;
+    margin: 20rpx 0;
+  }
+  
+  .subscribe-desc {
+    font-size: 24rpx;
+    color: #999;
+    display: block;
+    text-align: center;
+    margin-bottom: 40rpx;
+  }
+  
+  .about-item {
+    background-color: #fff;
+    padding: 30rpx 20rpx;
+    border-radius: 10rpx;
+    margin-bottom: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.1);
+  }
+  
+  .about-title {
+    font-size: 30rpx;
+    color: #333;
+  }
+  
+  .about-content {
+    font-size: 30rpx;
+    color: #666;
+  }
