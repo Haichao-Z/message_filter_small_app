@@ -7,7 +7,11 @@ Page({
   data: {
     contacts: [],
     isLoading: true,
-    isDev: true  // 设置为true时会显示测试按钮，发布前改为false
+    isDev: true,  // 设置为true时会显示测试按钮，发布前改为false
+
+    shareQrCode: '',
+    showShareModal: false,  // 初始值应该是false
+    currentShareContactId: ''
   },
   
   onLoad: function() {
@@ -21,8 +25,7 @@ Page({
   },
   
   // 获取联系人列表
-// 获取联系人列表
-fetchContacts: function() {
+  fetchContacts: function() {
     const that = this;
     that.setData({ isLoading: true });
     
@@ -57,16 +60,15 @@ fetchContacts: function() {
     });
   },
   
-    // 切换联系人重要状态
-    toggleImportant: function(e) {
+  // 切换联系人重要状态
+  toggleImportant: function(e) {
     // 获取开关的当前状态和联系人ID
-    const newStatus = e.detail.value;  // 这是开关的新状态
+    const newStatus = e.detail.value;
     const id = e.currentTarget.dataset.id;
     
     console.log('toggleImportant被调用');
     console.log('联系人ID:', id);
     console.log('新状态:', newStatus);
-    console.log('当前联系人列表:', this.data.contacts);
     
     // 安全检查 - ID是否存在
     if (!id) {
@@ -96,12 +98,6 @@ fetchContacts: function() {
       title: '更新中...',
     });
     
-    // 获取数据库引用
-    const db = wx.cloud.database();
-    const contactsCollection = db.collection('contacts');
-    
-    console.log('准备更新数据库，ID:', id, '新状态:', newStatus);
-    
     // 更新数据库
     contactsCollection.doc(id).update({
       data: {
@@ -128,10 +124,9 @@ fetchContacts: function() {
     }).catch(err => {
       wx.hideLoading();
       console.error('更新联系人状态失败：', err);
-      console.error('详细错误信息:', err);
       
       wx.showToast({
-        title: '操作失败，请查看控制台错误',
+        title: '操作失败',
         icon: 'none'
       });
     });
@@ -145,18 +140,16 @@ fetchContacts: function() {
   },
   
   // 导航到编辑联系人页面
-  // 导航到编辑联系人页面
-    navigateToEdit: function(e) {
-        const id = e.currentTarget.dataset.id;
-        console.log('导航到编辑页面，联系人ID:', id);
-        wx.navigateTo({
-        url: `/pages/contact/edit?id=${id}`
-        });
-    },
+  navigateToEdit: function(e) {
+    const id = e.currentTarget.dataset.id;
+    console.log('导航到编辑页面，联系人ID:', id);
+    wx.navigateTo({
+      url: `/pages/contact/edit?id=${id}`
+    });
+  },
   
   // 删除联系人
-  // 删除联系人
-deleteContact: function(e) {
+  deleteContact: function(e) {
     const id = e.currentTarget.dataset.id;
     const that = this;
     
@@ -228,7 +221,7 @@ deleteContact: function(e) {
             sender: contact.name,
             content: '这是一条测试通知，来自重要联系人。',
             notificationId: saveRes.result.notificationId,
-            templateId: 'YOUR_TEMPLATE_ID' // 替换为您的模板ID
+            templateId: '95gSh9BVBrjej4zHZSCvDGCC0b7-7oVUK9-p3a11azE' // 使用您的模板ID
           }
         }).then(sendRes => {
           wx.showToast({
@@ -252,8 +245,8 @@ deleteContact: function(e) {
     });
   },
 
-  // 在index.js中添加
-testLogin: function() {
+  // 测试login功能
+  testLogin: function() {
     wx.showLoading({
       title: '测试login...',
     });
@@ -282,6 +275,135 @@ testLogin: function() {
           title: 'Login失败',
           content: JSON.stringify(err),
           showCancel: false
+        });
+      }
+    });
+  },
+
+  // 分享联系人
+  shareWithContact: function(e) {
+    const contactId = e.currentTarget.dataset.id;
+    
+    console.log('开始生成分享码，联系人ID:', contactId);
+    console.log('当前用户openid:', app.globalData.openid);
+    
+    this.setData({
+      currentShareContactId: contactId
+    });
+    
+    // 简化处理 - 直接显示分享模态框
+    this.setData({
+      showShareModal: true
+    });
+    
+    wx.showLoading({ title: '生成分享码...' });
+    
+    // 添加详细日志
+    console.log('准备调用云函数', {
+      name: 'quickstartFunctions',
+      data: {
+        type: 'getMiniProgramCode',
+        path: `pages/reminder/send?contactId=${contactId}&receiverId=${app.globalData.openid}`
+      }
+    });
+    
+    // 调用云函数生成小程序码
+    wx.cloud.callFunction({
+      name: 'quickstartFunctions',
+      data: {
+        type: 'getMiniProgramCode',
+        path: `pages/reminder/send?contactId=${contactId}&receiverId=${app.globalData.openid}`
+      }
+    }).then(res => {
+      wx.hideLoading();
+      console.log('云函数调用成功，返回结果:', res);
+      
+      if (res.result) {
+        this.setData({
+          shareQrCode: res.result
+        });
+      } else {
+        console.error('返回结果不含fileID:', res);
+        wx.showToast({
+          title: '生成二维码失败',
+          icon: 'none'
+        });
+      }
+    }).catch(err => {
+      wx.hideLoading();
+      console.error('调用云函数失败:', err);
+      wx.showToast({
+        title: '生成分享码失败',
+        icon: 'none'
+      });
+    });
+  },
+  
+  // 关闭分享模态框
+  closeShareModal: function() {
+    this.setData({
+      showShareModal: false  // 修正：应该设为false
+    });
+  },
+  
+  // 添加转发功能
+  onShareAppMessage: function(res) {
+    if (this.data.currentShareContactId) {
+      return {
+        title: '点击发送重要通知',
+        path: `/pages/reminder/send?contactId=${this.data.currentShareContactId}&receiverId=${app.globalData.openid}`,
+        imageUrl: '../../images/icons/avatar.png' // 使用现有图片
+      }
+    }
+    return {
+      title: '重要联系人通知筛选器',
+      path: '/pages/index/index'
+    }
+  },
+
+  // 处理图片加载错误
+  handleImageError: function(e) {
+    console.error('图片加载失败:', e);
+    wx.showToast({
+      title: '二维码加载失败',
+      icon: 'none'
+    });
+  },
+  
+  // 检查订阅状态
+  checkSubscription: function() {
+    // 检查是否已获得订阅授权
+    wx.getSetting({
+      withSubscriptions: true,
+      success: (res) => {
+        const templateId = '95gSh9BVBrjej4zHZSCvDGCC0b7-7oVUK9-p3a11azE';
+        
+        // 如果没有授权，显示订阅引导
+        if (!res.subscriptionsSetting || !res.subscriptionsSetting[templateId] || res.subscriptionsSetting[templateId] !== 'accept') {
+          this.setData({
+            showSubscribeTip: true
+          });
+        }
+      }
+    });
+  },
+  
+  // 请求订阅消息
+  requestSubscription: function() {
+    const templateId = '95gSh9BVBrjej4zHZSCvDGCC0b7-7oVUK9-p3a11azE';
+    
+    wx.requestSubscribeMessage({
+      tmplIds: [templateId],
+      success: (res) => {
+        if (res[templateId] === 'accept') {
+          wx.showToast({
+            title: '订阅成功，现在您可以接收通知',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+        this.setData({
+          showSubscribeTip: false
         });
       }
     });

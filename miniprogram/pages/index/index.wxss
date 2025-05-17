@@ -78,3 +78,79 @@
     color: #999;
     padding: 100rpx 0;
   }
+
+  /* 添加分享按钮样式 */
+.share-button {
+    font-size: 24rpx;
+    padding: 6rpx 20rpx;
+    margin-left: 10rpx;
+    border-radius: 8rpx;
+    background-color: #3498db;
+    color: white;
+  }
+  
+  /* 分享弹窗样式 */
+  .share-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-content {
+    position: relative;
+    width: 80%;
+    background-color: #fff;
+    border-radius: 10rpx;
+    padding: 40rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1001;
+  }
+  
+  .modal-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    margin-bottom: 20rpx;
+  }
+  
+  .modal-desc {
+    font-size: 28rpx;
+    color: #666;
+    margin-bottom: 30rpx;
+    text-align: center;
+  }
+  
+  .qr-code {
+    width: 360rpx;
+    height: 360rpx;
+    margin-bottom: 30rpx;
+  }
+  
+  .forward-button {
+    background-color: #3498db;
+    color: white;
+    width: 80%;
+    margin-bottom: 20rpx;
+  }
+  
+  .close-button {
+    background-color: #f1f1f1;
+    color: #333;
+    width: 80%;
+  }

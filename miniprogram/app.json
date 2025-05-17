@@ -4,7 +4,8 @@
       "pages/contact/add",
       "pages/contact/edit",
       "pages/history/history",
-      "pages/settings/settings"
+      "pages/settings/settings",
+      "pages/reminder/send"
     ],
     "window": {
       "backgroundTextStyle": "light",

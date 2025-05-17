@@ -8,30 +8,48 @@
   <!-- 联系人列表 -->
   <view class="contact-list">
     <block wx:if="{{contacts.length > 0}}">
-        <view class="contact-item" wx:for="{{contacts}}" wx:key="_id">
-  <view class="contact-info">
-    <text class="contact-name">{{item.name}}</text>
-  </view>
-  <view class="contact-actions">
-    <switch checked="{{item.isImportant}}" bindchange="toggleImportant" data-id="{{item._id}}" color="#3498db"/>
-    <view class="action-buttons">
-      <button class="edit-button" bindtap="navigateToEdit" data-id="{{item._id}}">编辑</button>
-      <button class="delete-button" bindtap="deleteContact" data-id="{{item._id}}">删除</button>
-    </view>
-  </view>
-</view>
+      <view class="contact-item" wx:for="{{contacts}}" wx:key="_id">
+        <view class="contact-info">
+          <text class="contact-name">{{item.name}}</text>
+        </view>
+        <view class="contact-actions">
+          <switch checked="{{item.isImportant}}" bindchange="toggleImportant" data-id="{{item._id}}" color="#3498db"/>
+          <view class="action-buttons">
+            <button class="share-button" bindtap="shareWithContact" data-id="{{item._id}}">分享</button>
+            <button class="edit-button" bindtap="navigateToEdit" data-id="{{item._id}}">编辑</button>
+            <button class="delete-button" bindtap="deleteContact" data-id="{{item._id}}">删除</button>
+          </view>
+        </view>
+      </view>
     </block>
     <view wx:else class="empty-list">
       <text>暂无重要联系人，请点击"添加"按钮添加联系人</text>
     </view>
   </view>
-</view>
+  
+  <!-- 开发工具按钮 -->
+  <view class="dev-tools" wx:if="{{isDev}}">
+    <button class="test-button" bindtap="testNotification">测试通知</button>
+    <button class="debug-button" bindtap="testLogin">测试Login云函数</button>
+  </view>
 
-<view class="dev-tools" wx:if="{{isDev}}">
-  <button class="test-button" bindtap="testNotification">测试通知</button>
-</view>
-
-<!-- 在index.wxml中添加 -->
-<view class="debug-tools" wx:if="{{isDev}}">
-  <button class="debug-button" bindtap="testLogin">测试Login云函数</button>
+  <!-- 分享弹窗 -->
+  <view class="share-modal" wx:if="{{showShareModal}}">
+    <view class="modal-overlay" bindtap="closeShareModal"></view>
+    <view class="modal-content">
+      <view class="modal-title">分享给重要联系人</view>
+      <view class="modal-desc">扫描下方二维码或转发小程序，联系人可发送通知给您</view>
+      
+      <!-- 添加加载状态和错误处理 -->
+      <block wx:if="{{shareQrCode}}">
+        <image class="qr-code" src="{{shareQrCode}}" mode="aspectFit" binderror="handleImageError" />
+      </block>
+      <block wx:else>
+        <view class="qr-code-placeholder">二维码加载中...</view>
+      </block>
+      
+      <button open-type="share" class="forward-button">转发给好友</button>
+      <button bindtap="closeShareModal" class="close-button">关闭</button>
+    </view>
+  </view>
 </view>
