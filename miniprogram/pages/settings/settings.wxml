@@ -25,10 +25,6 @@
     <switch checked="{{settings.notificationVibration}}" bindchange="toggleVibration" color="#3498db"/>
   </view>
   
-  <view class="section-title">订阅消息</view>
-  <button class="subscribe-button" bindtap="requestSubscription">订阅通知消息</button>
-  <text class="subscribe-desc">订阅后，我们将通过微信向您推送重要联系人的通知提醒</text>
-  
   <view class="section-title">关于</view>
   <view class="about-item">
     <text class="about-title">当前版本</text>
@@ -38,4 +34,17 @@
     <text class="about-title">开发者</text>
     <text class="about-content">赵大仙</text>
   </view>
+</view>
+
+<view class="subscription-section">
+  <button class="subscribe-button" bindtap="requestSubscription">订阅通知消息</button>
+  <text class="subscribe-desc">订阅后，我们将通过微信向您推送重要联系人的通知提醒</text>
+  
+  <!-- 仅在开发环境显示的测试按钮 -->
+  <button class="test-button" bindtap="testSubscriptionSend" wx:if="{{isDev}}">测试发送订阅消息</button>
+</view>
+
+<!-- 在settings.wxml中添加 -->
+<view class="debug-tools" wx:if="{{isDev}}">
+  <button class="debug-button" bindtap="checkOpenid">检查用户ID</button>
 </view>

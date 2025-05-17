@@ -250,5 +250,40 @@ deleteContact: function(e) {
         icon: 'none'
       });
     });
+  },
+
+  // 在index.js中添加
+testLogin: function() {
+    wx.showLoading({
+      title: '测试login...',
+    });
+    
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {},
+      success: res => {
+        wx.hideLoading();
+        console.log('login测试成功:', res);
+        
+        wx.showModal({
+          title: 'Login成功',
+          content: `获取到openid: ${res.result.openid || '无'}`,
+          showCancel: false
+        });
+        
+        // 更新全局openid
+        getApp().globalData.openid = res.result.openid;
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.error('login测试失败:', err);
+        
+        wx.showModal({
+          title: 'Login失败',
+          content: JSON.stringify(err),
+          showCancel: false
+        });
+      }
+    });
   }
 });

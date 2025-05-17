@@ -30,3 +30,8 @@
 <view class="dev-tools" wx:if="{{isDev}}">
   <button class="test-button" bindtap="testNotification">测试通知</button>
 </view>
+
+<!-- 在index.wxml中添加 -->
+<view class="debug-tools" wx:if="{{isDev}}">
+  <button class="debug-button" bindtap="testLogin">测试Login云函数</button>
+</view>
