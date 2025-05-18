@@ -1,22 +1,27 @@
-<!-- 在pages/reminder/send.wxml中 -->
 <view class="container">
   <view class="header">
     <text class="title">发送通知</text>
   </view>
   
-  <view class="form-container">
-    <view class="form-item">
-      <text class="label">接收者</text>
-      <text class="value">{{contactName || '加载中...'}}</text>
-    </view>
-    
-    <view class="form-item message-input">
-      <text class="label">通知内容</text>
-      <textarea class="input-area" placeholder="请输入您要发送的通知内容" bindinput="onMessageInput" value="{{message}}"></textarea>
-    </view>
-    
-    <button class="send-button" bindtap="sendReminder" disabled="{{isLoading}}">发送通知</button>
+  <view class="form-item">
+    <text class="label">接收者</text>
+    <block wx:if="{{isLoading}}">
+      <text class="value loading">加载中...</text>
+    </block>
+    <block wx:elif="{{contactError}}">
+      <text class="value error">{{errorMsg || '联系人加载失败'}}</text>
+    </block>
+    <block wx:else>
+      <text class="value">{{contactName || '未知联系人'}}</text>
+    </block>
   </view>
+  
+  <view class="form-item message-input">
+    <text class="label">通知内容</text>
+    <textarea class="input-area" placeholder="请输入您要发送的通知内容" bindinput="onMessageInput" value="{{message}}"></textarea>
+  </view>
+  
+  <button class="send-button" bindtap="sendReminder" disabled="{{isLoading}}">发送通知</button>
   
   <view class="tips">
     <text class="tip-text">提示：发送通知将立即提醒对方，请勿滥用</text>

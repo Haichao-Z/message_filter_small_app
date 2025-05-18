@@ -347,18 +347,32 @@ Page({
   },
   
   // 添加转发功能
-  onShareAppMessage: function(res) {
+  // 在分享函数中确保ID正确传递
+onShareAppMessage: function(res) {
     if (this.data.currentShareContactId) {
+      const contactId = this.data.currentShareContactId;
+      const receiverId = app.globalData.openid;
+      
+      console.log('准备分享，参数:', {
+        contactId: contactId,
+        receiverId: receiverId
+      });
+      
+      if (!contactId || !receiverId) {
+        console.error('分享参数不完整');
+      }
+      
       return {
         title: '点击发送重要通知',
-        path: `/pages/reminder/send?contactId=${this.data.currentShareContactId}&receiverId=${app.globalData.openid}`,
-        imageUrl: '../../images/icons/avatar.png' // 使用现有图片
-      }
+        path: `pages/reminder/send?contactId=${contactId}&receiverId=${receiverId}`,
+        imageUrl: '../../images/icons/avatar.png'
+      };
     }
+    // 默认分享
     return {
       title: '重要联系人通知筛选器',
-      path: '/pages/index/index'
-    }
+      path: 'pages/index/index'
+    };
   },
 
   // 处理图片加载错误

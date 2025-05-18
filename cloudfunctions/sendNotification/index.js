@@ -12,10 +12,16 @@ exports.main = async (event, context) => {
   console.log('接收到发送通知请求:', event);
   
   if (!openid || !sender || !content || !templateId) {
-    return {
-      success: false,
-      error: '参数不完整'
-    };
+    console.error('参数缺失:', { openid, sender, content, templateId });
+  return {
+    success: false,
+    error: '参数不完整: ' + JSON.stringify({ 
+      openid: openid || '缺失', 
+      sender: sender || '缺失', 
+      content: content || '缺失', 
+      templateId: templateId || '缺失' 
+    })
+  };
   }
   
   try {
@@ -119,10 +125,33 @@ exports.main = async (event, context) => {
       notificationId: savedNotificationId // 返回通知ID，以便后续使用
     };
   } catch (error) {
+    // 详细记录错误
     console.error('发送订阅消息错误:', error);
+    
+    // 对常见错误进行特殊处理
+    if (error.errCode === 40037) {
+      return {
+        success: false,
+        error: '订阅消息模板ID不正确或用户未授权',
+        errCode: error.errCode,
+        errMsg: error.errMsg
+      };
+    }
+    
+    if (error.errCode === 43101) {
+      return {
+        success: false,
+        error: '用户拒绝接受消息',
+        errCode: error.errCode,
+        errMsg: error.errMsg
+      };
+    }
+    
+    // 其他错误
     return {
       success: false,
-      error: error.message || '发送失败'
+      error: error.errMsg || '发送失败',
+      errCode: error.errCode
     };
   }
 }

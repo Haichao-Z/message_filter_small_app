@@ -69,3 +69,12 @@
     font-size: 24rpx;
     color: #999;
   }
+
+  /* pages/reminder/send.wxss */
+.loading {
+    color: #999;
+  }
+  
+  .error {
+    color: #e74c3c;
+  }
